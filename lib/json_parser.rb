@@ -4,7 +4,7 @@ require 'json'
 
 class JsonParser
   def initialize(json_str = nil)
-    @json_str = File.read("tests/step2/valid.json")
+    @json_str = File.read("tests/step3/valid.json")
   end
 
   def parse
