@@ -5,6 +5,8 @@ class LexicalAnalyser
       '}' => 'r_brace',
       ':' => 'colon',
       ',' => 'comma',
+      '[' => 'l_bracket',
+      ']' => 'r_bracket'
     }
 
     def compute_tokens(json_str)
@@ -12,7 +14,7 @@ class LexicalAnalyser
 
       until json_str.empty?
         tokens << case json_str.strip
-                  when /\A[\{\}:,]/
+                  when /\A[\{\}:,\[\]]/
                     then { type: TOKEN_TYPES[$&], value: $& }
                   when /\A(\d+)/
                     then { type: 'Integer', value: $1.to_i }

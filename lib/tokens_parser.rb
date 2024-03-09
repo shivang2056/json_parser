@@ -15,16 +15,18 @@ class TokensParser
     def parse_object(tokens)
       hash = {}
 
-      until tokens.empty? || tokens.first[:type] == :r_brace
+      until tokens.first[:type] == 'r_brace'
         key = parse_value(tokens)
         tokens.shift
         value = parse_value(tokens)
 
         hash[key] = value
-        tokens.shift
+
+        tokens.shift if tokens.first[:type] == 'comma'
       end
 
-      return hash if tokens.empty? || tokens.first[:type] = :r_brace
+      tokens.shift
+      return hash
     end
 
     def parse_value(tokens)
@@ -33,10 +35,27 @@ class TokensParser
       case token[:type].to_s
       when 'String', 'Integer', 'Boolean', 'Null'
         token[:value]
+      when 'l_brace'
+        parse_object(tokens)
+      when 'l_bracket'
+        parse_array(tokens)
       else
         puts token
+        puts tokens
         raise
       end
+    end
+
+    def parse_array(tokens)
+      arr = []
+
+      until tokens.first[:type] == 'r_bracket'
+        arr << parse_value(tokens)
+        tokens.shift if tokens.first[:type] == 'comma'
+      end
+
+      tokens.shift
+      return arr
     end
   end
 end
