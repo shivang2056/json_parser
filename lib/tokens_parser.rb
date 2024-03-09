@@ -14,7 +14,27 @@ class TokensParser
     def parse_object(tokens)
       hash = {}
 
-      return hash if tokens.first[:type] == :r_brace
+      until tokens.first[:type] == :r_brace
+        key = parse_value(tokens)
+        tokens.shift
+        value = parse_value(tokens)
+
+        hash[key] = value
+      end
+
+      return hash if tokens.first[:type] = :r_brace
+    end
+
+    def parse_value(tokens)
+      token = tokens.shift
+
+      case token[:type]
+      when 'String'
+        token[:value]
+      else
+        puts token
+        raise
+      end
     end
   end
 end
