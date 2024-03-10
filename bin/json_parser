@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require_relative "../lib/json_parser.rb"
 
-puts JsonParser.new.parse
+puts JsonParser.new(ARGV[0]).parse

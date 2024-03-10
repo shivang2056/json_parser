@@ -22,7 +22,17 @@ class TokensParser
 
         hash[key] = value
 
-        tokens.shift if tokens.first[:type] == 'comma'
+        next_token_type = tokens.first ? tokens.first[:type] : nil
+
+        raise '\njson_parser: Expected comma or closing brace' unless ['comma', 'r_brace'].include?(next_token_type)
+
+        if tokens.first[:type] == 'comma'
+          tokens.shift
+
+          next_token_type = tokens.first ? tokens.first[:type] : nil
+
+          raise "\njson_parser: Expected next string key" unless next_token_type == 'String'
+        end
       end
 
       tokens.shift

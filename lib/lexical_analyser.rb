@@ -25,8 +25,7 @@ class LexicalAnalyser
                   when /\Anull/
                     then { type: 'Null', value: nil }
                   else
-                    puts json_str
-                    raise
+                    raise "\njson_parser: Unable to parse at #{json_str}"
                   end
 
         json_str = $'
