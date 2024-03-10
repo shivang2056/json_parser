@@ -8,7 +8,7 @@ class JsonParser
   end
 
   def parse(print_tokens = false)
-    raise "\njson_parser: File is empty" if @json_str.empty?
+    raise(RuntimeError, "File is empty", []) if @json_str.empty?
 
     tokens = LexicalAnalyser.compute_tokens(@json_str)
     puts "Computed Tokens: #{JSON.pretty_generate(tokens)}" if print_tokens
@@ -20,11 +20,11 @@ class JsonParser
 
   def read_file(path)
     if path.nil?
-      raise "\njson_parser: File path not provided"
+      raise RuntimeError, "File path not provided", []
     elsif File.exist?(path)
       File.read(path)
     else
-      raise "\njson_parser: #{path}: open: No such file or directory"
+      raise RuntimeError, "#{path}: open: No such file or directory", []
     end
   end
 end

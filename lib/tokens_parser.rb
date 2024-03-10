@@ -11,7 +11,7 @@ class TokensParser
       when 'l_bracket'
         parse_array(tokens)
       else
-        raise "\njson_parser: Unexpected token #{token}"
+        raise "Unexpected token #{token}"
       end
     end
 
@@ -49,11 +49,15 @@ class TokensParser
     private
 
     def raise_unless_token_is_colon(token)
-      raise "\njson_parser: Expected colon" unless token[:type] == 'colon'
+      unless token[:type] == 'colon'
+        raise RuntimeError, "Expected colon", []
+      end
     end
 
     def raise_unless_token_is_comma_or_r_brace(token)
-      raise "\njson_parser: Expected comma or closing brace" unless ['comma', 'r_brace'].include?(token[:type])
+      unless ['comma', 'r_brace'].include?(token[:type])
+        raise RuntimeError, "Expected comma or closing brace", []
+      end
     end
 
     def further_check_if_next_token_is_comma(tokens)
@@ -67,11 +71,15 @@ class TokensParser
     end
 
     def raise_unless_token_is_string(token)
-      raise "\njson_parser: Expected next string key" unless token[:type] == 'String'
+      unless token[:type] == 'String'
+        raise RuntimeError, "Expected next string key", []
+      end
     end
 
     def raise_unless_token_is_comma_or_r_bracket(token)
-      raise "\njson_parser: Expected comma or closing bracket" unless ['comma', 'r_bracket'].include?(token[:type])
+      unless ['comma', 'r_bracket'].include?(token[:type])
+        raise RuntimeError, "Expected comma or closing bracket", []
+      end
     end
   end
 end

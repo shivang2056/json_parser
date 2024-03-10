@@ -25,7 +25,7 @@ class LexicalAnalyser
                   when null_match
                     then { type: 'Null', value: nil }
                   else
-                    raise "\njson_parser: Unable to parse at #{json_str}"
+                    raise RuntimeError, "Unable to parse at #{json_str}", []
                   end
 
         json_str = $'
