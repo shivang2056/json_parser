@@ -7,16 +7,13 @@ class JsonParser
     @json_str = read_file(file_path)
   end
 
-  def parse
+  def parse(print_tokens = false)
     raise "\njson_parser: File is empty" if @json_str.empty?
 
     tokens = LexicalAnalyser.compute_tokens(@json_str)
-    puts "Computed Tokens: #{JSON.pretty_generate(tokens)}"
+    puts "Computed Tokens: #{JSON.pretty_generate(tokens)}" if print_tokens
 
-    parsed_json = TokensParser.parse(tokens)
-    puts "Parsed JSON: #{parsed_json}"
-
-    parsed_json
+    TokensParser.parse_value(tokens)
   end
 
   private

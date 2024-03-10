@@ -1,6 +1,6 @@
 class LexicalAnalyser
   class << self
-    TOKEN_TYPES = {
+    STRUCTURAL_TOKEN_TYPES = {
       '{' => 'l_brace',
       '}' => 'r_brace',
       ':' => 'colon',
@@ -14,15 +14,15 @@ class LexicalAnalyser
 
       until json_str.empty?
         tokens << case json_str.strip
-                  when /\A[\{\}:,\[\]]/
-                    then { type: TOKEN_TYPES[$&], value: $& }
-                  when /\A(\d+)/
+                  when structural_token_match
+                    then { type: STRUCTURAL_TOKEN_TYPES[$&], value: $& }
+                  when integer_match
                     then { type: 'Integer', value: $1.to_i }
-                  when /\A"([^"]*?)"/
+                  when string_match
                     then { type: 'String', value: $1 }
-                  when /\A(true|false)/
+                  when boolean_match
                     then { type: 'Boolean', value: $1 == 'true' }
-                  when /\Anull/
+                  when null_match
                     then { type: 'Null', value: nil }
                   else
                     raise "\njson_parser: Unable to parse at #{json_str}"
@@ -31,7 +31,29 @@ class LexicalAnalyser
         json_str = $'
       end
 
-      return tokens
+      tokens
+    end
+
+    private
+
+    def structural_token_match
+      /\A[\{\}:,\[\]]/
+    end
+
+    def integer_match
+      /\A(\d+)/
+    end
+
+    def string_match
+      /\A"([^"]*?)"/
+    end
+
+    def boolean_match
+      /\A(true|false)/
+    end
+
+    def null_match
+      /\Anull/
     end
   end
 end

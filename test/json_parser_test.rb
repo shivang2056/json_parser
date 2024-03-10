@@ -1,6 +1,5 @@
 require "minitest/autorun"
 require_relative "../lib/json_parser"
-require "byebug"
 
 class JsonParserTest < Minitest::Test
 
