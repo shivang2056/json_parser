@@ -154,6 +154,8 @@ bin/json_parser: Expected next string key (RuntimeError)
 [$]> bin/json_parser ./test/json_files/step4/invalid4.json
 bin/json_parser: Expected comma or closing bracket (RuntimeError)
 
+```
+
 
 ## License
 
