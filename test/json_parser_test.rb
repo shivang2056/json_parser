@@ -40,6 +40,14 @@ class JsonParserTest < Minitest::Test
     assert_equal "\njson_parser: Unable to parse at \n  key2: \"value\"\n}", error.message
   end
 
+  def test_for_step2_invalid_json3
+    error = assert_raises(RuntimeError) do
+      JsonParser.new("./test/json_files/step2/invalid3.json").parse
+    end
+
+    assert_equal "\njson_parser: Expected colon", error.message
+  end
+
   def test_for_step3_valid_json
     assert_equal({"key1"=>true, "key2"=>false, "key3"=>nil, "key4"=>"value", "key5"=>101},
       JsonParser.new("./test/json_files/step3/valid.json").parse)
@@ -70,6 +78,30 @@ class JsonParserTest < Minitest::Test
     end
 
     assert_equal "\njson_parser: Unable to parse at 'list value']\n}", error.message
+  end
+
+  def test_for_step4_invalid_json2
+    error = assert_raises(RuntimeError) do
+      JsonParser.new("./test/json_files/step4/invalid2.json").parse
+    end
+
+    assert_equal "\njson_parser: Expected comma or closing brace", error.message
+  end
+
+  def test_for_step4_invalid_json3
+    error = assert_raises(RuntimeError) do
+      JsonParser.new("./test/json_files/step4/invalid3.json").parse
+    end
+
+    assert_equal "\njson_parser: Expected next string key", error.message
+  end
+
+  def test_for_step4_invalid_json4
+    error = assert_raises(RuntimeError) do
+      JsonParser.new("./test/json_files/step4/invalid4.json").parse
+    end
+
+    assert_equal "\njson_parser: Expected comma or closing bracket", error.message
   end
 
   def test_for_blank_file_path

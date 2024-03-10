@@ -7,8 +7,7 @@ class TokensParser
       when 'l_brace'
         parse_object(tokens)
       else
-        puts token
-        raise
+        raise "\njson_parser: Unexpected token #{token}"
       end
     end
 
@@ -17,14 +16,15 @@ class TokensParser
 
       until tokens.first[:type] == 'r_brace'
         key = parse_value(tokens)
-        tokens.shift
+        colon_token = tokens.shift
+        raise "\njson_parser: Expected colon" unless colon_token[:type] == 'colon'
         value = parse_value(tokens)
 
         hash[key] = value
 
         next_token_type = tokens.first ? tokens.first[:type] : nil
 
-        raise '\njson_parser: Expected comma or closing brace' unless ['comma', 'r_brace'].include?(next_token_type)
+        raise "\njson_parser: Expected comma or closing brace" unless ['comma', 'r_brace'].include?(next_token_type)
 
         if tokens.first[:type] == 'comma'
           tokens.shift
@@ -50,9 +50,7 @@ class TokensParser
       when 'l_bracket'
         parse_array(tokens)
       else
-        puts token
-        puts tokens
-        raise
+        raise "\njson_parser: Unexpected token #{token}"
       end
     end
 
@@ -61,7 +59,18 @@ class TokensParser
 
       until tokens.first[:type] == 'r_bracket'
         arr << parse_value(tokens)
-        tokens.shift if tokens.first[:type] == 'comma'
+
+        next_token_type = tokens.first ? tokens.first[:type] : nil
+
+        raise "\njson_parser: Expected comma or closing bracket" unless ['comma', 'r_bracket'].include?(next_token_type)
+
+        if tokens.first[:type] == 'comma'
+          tokens.shift
+
+          next_token_type = tokens.first ? tokens.first[:type] : nil
+
+          raise "\njson_parser: Expected next string key" unless next_token_type == 'String'
+        end
       end
 
       tokens.shift
